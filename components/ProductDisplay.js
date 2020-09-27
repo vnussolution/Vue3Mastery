@@ -16,8 +16,9 @@ app.component("product-display", {
                 </div>
                 <div class="product-info">
                     <h1>{{title}}</h1>
-                    <p v-if="inventory > 10">In stock</p>
                     <p > Shipping : {{shipping}} </p>
+                    <p v-if="inventory > 10">In stock</p>
+                    
                     <p v-else-if="inventory <= 10 && inventory >0">Almost sold out</p>
                     <p v-else="inventory <= 0">Sold out</p>
                     <p v-if="onSale">On Sale</p>
@@ -34,7 +35,6 @@ app.component("product-display", {
                     <button
                     class="button"
                     @click="addToCart"
-                    class=""
                     :disabled="!inStock"
                     :class="{disabledButton:!inStock}"
 
@@ -46,12 +46,14 @@ app.component("product-display", {
                     </button>
                 </div>
                 </div>
+                <review-list v-if='reviews.length' :reviews='reviews'></review-list>
+                <review-form @review-submitted='addReview'></review-form>
+
             </div>`,
   data() {
     return {
       product: "Socks",
       description: "long description here",
-      inventory: 2,
       onSale: false,
       details: ["50% cotton", "30% wool", "20% polyester"],
       items: [
@@ -70,6 +72,7 @@ app.component("product-display", {
       ],
       brand: "Vue Mastery",
       selectedItem: 0,
+      reviews:[]
     };
   },
   methods: {
@@ -82,6 +85,9 @@ app.component("product-display", {
     updateImage(index) {
       this.selectedItem = index;
     },
+    addReview(review){
+        this.reviews.push(review);
+    }
   },
   computed: {
     title() {
